@@ -1,0 +1,551 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b18">
+    <meta name="description" content="Nexora Technologies — connected digital services for organizations, schools and businesses.">
+
+    <title>Nexora Technologies | Nexora Central</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #080b18;
+            --panel: rgba(17, 24, 43, 0.88);
+            --border: rgba(131, 149, 199, 0.20);
+            --text: #f3f5ff;
+            --muted: #a8b4d0;
+            --purple: #947bff;
+            --cyan: #69d9f5;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    ellipse at 10% 10%,
+                    rgba(91, 76, 255, 0.23),
+                    transparent 40%
+                ),
+                radial-gradient(
+                    ellipse at 90% 35%,
+                    rgba(0, 190, 230, 0.15),
+                    transparent 38%
+                ),
+                radial-gradient(
+                    ellipse at 50% 100%,
+                    rgba(102, 55, 210, 0.15),
+                    transparent 45%
+                ),
+                var(--bg);
+            background-attachment: fixed;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 17px 6%;
+            background: rgba(8, 11, 24, 0.90);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 47px;
+            height: 47px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            color: white;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #7657ff, #10bfe5);
+            box-shadow: 0 0 28px rgba(118, 87, 255, 0.30);
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            letter-spacing: 0.2px;
+        }
+
+        .brand p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            border: 1px solid rgba(65, 213, 158, 0.25);
+            background: rgba(25, 95, 72, 0.18);
+            border-radius: 30px;
+            color: #75e7b5;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #65e6ad;
+        }
+
+        main {
+            width: min(1200px, 100%);
+            margin: auto;
+            padding: 38px 5%;
+        }
+
+        .welcome {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(25px, 5vw, 48px);
+            border: 1px solid rgba(151, 135, 255, 0.27);
+            border-radius: 25px;
+            background:
+                radial-gradient(
+                    circle at 95% 10%,
+                    rgba(52, 177, 229, 0.15),
+                    transparent 36%
+                ),
+                linear-gradient(
+                    125deg,
+                    rgba(30, 34, 73, 0.94),
+                    rgba(13, 21, 39, 0.94)
+                );
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.15);
+        }
+
+        .eyebrow {
+            color: #b0a1ff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .welcome h2 {
+            max-width: 750px;
+            margin: 17px 0;
+            font-size: clamp(30px, 5vw, 49px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #b6a7ff, #70e2f5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .welcome-description {
+            max-width: 650px;
+            color: #b4c0da;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            padding: 12px 18px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(110deg, #7657ff, #496eea);
+            box-shadow: 0 7px 24px rgba(91, 76, 255, 0.22);
+        }
+
+        .btn-secondary {
+            color: #dce5ff;
+            background: rgba(255, 255, 255, 0.035);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 35px 0 18px;
+        }
+
+        .section-heading h2 {
+            font-size: 21px;
+        }
+
+        .section-heading p {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .section-label {
+            color: #9daaca;
+            font-size: 11px;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        .module {
+            position: relative;
+            min-height: 205px;
+            overflow: hidden;
+            padding: 23px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--panel);
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s, border-color 0.2s,
+                        background 0.2s;
+        }
+
+        .module::after {
+            position: absolute;
+            top: -45px;
+            right: -45px;
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            background: rgba(115, 92, 255, 0.08);
+            content: "";
+            pointer-events: none;
+        }
+
+        .module:hover {
+            transform: translateY(-4px);
+            border-color: rgba(144, 125, 255, 0.65);
+            background: rgba(24, 32, 57, 0.96);
+        }
+
+        .module-icon {
+            display: grid;
+            place-items: center;
+            width: 49px;
+            height: 49px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(156, 146, 255, 0.15);
+            border-radius: 15px;
+            background: linear-gradient(
+                135deg,
+                rgba(120, 87, 255, 0.18),
+                rgba(25, 185, 226, 0.10)
+            );
+            font-size: 23px;
+        }
+
+        .module h3 {
+            margin-bottom: 9px;
+            font-size: 17px;
+        }
+
+        .module p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .module-status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 9px;
+            border: 1px solid rgba(139, 123, 255, 0.22);
+            border-radius: 8px;
+            background: rgba(114, 88, 255, 0.08);
+            color: #b9adff;
+            font-size: 10px;
+        }
+
+        .foundation {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-top: 25px;
+            padding: 20px;
+            border: 1px solid rgba(105, 217, 245, 0.17);
+            border-radius: 15px;
+            background: rgba(17, 39, 54, 0.45);
+        }
+
+        .foundation-icon {
+            font-size: 23px;
+        }
+
+        .foundation h3 {
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .foundation p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer {
+            margin-top: 45px;
+            padding: 25px 5%;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: #8490ae;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 850px) {
+            .modules {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 540px) {
+            .topbar {
+                padding: 14px 5%;
+            }
+
+            .brand h1 {
+                font-size: 16px;
+            }
+
+            .brand p {
+                font-size: 11px;
+            }
+
+            .logo {
+                width: 42px;
+                height: 42px;
+            }
+
+            main {
+                padding: 25px 5%;
+            }
+
+            .welcome {
+                border-radius: 19px;
+            }
+
+            .welcome-description {
+                font-size: 14px;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+
+            .module {
+                min-height: auto;
+            }
+
+            .status {
+                padding: 8px 9px;
+                font-size: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="/" aria-label="Nexora Technologies home">
+            <div class="logo">NX</div>
+            <div>
+                <h1>Nexora Technologies</h1>
+                <p>One platform. Many possibilities.</p>
+            </div>
+        </a>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            Foundation
+        </div>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <div class="eyebrow">Nexora Central</div>
+
+            <h2>
+                Your digital world,
+                <span class="gradient-text">connected.</span>
+            </h2>
+
+            <p class="welcome-description">
+                A central platform for schools, organizations, student
+                reports, QR services, and secure digital tools.
+                Built to bring important services together in one place.
+            </p>
+
+            <div class="welcome-actions">
+                <a href="#services" class="btn btn-primary">
+                    Explore services <span>→</span>
+                </a>
+
+                <a href="#about" class="btn btn-secondary">
+                    About Nexora
+                </a>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="section-heading">
+                <div>
+                    <h2>Platform services</h2>
+                    <p>One foundation for multiple digital services.</p>
+                </div>
+
+                <span class="section-label">PLATFORM OVERVIEW</span>
+            </div>
+
+            <div class="modules">
+                <article class="module">
+                    <div class="module-icon">🏢</div>
+                    <h3>Organizations</h3>
+                    <p>
+                        Separate workspaces for schools and other
+                        organizations, with controlled access to their data.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+
+                <article class="module">
+                    <div class="module-icon">🎓</div>
+                    <h3>Student Report Generator</h3>
+                    <p>
+                        Create, save, and retrieve student performance
+                        reports organized by school term.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+
+                <article class="module">
+                    <div class="module-icon">▦</div>
+                    <h3>QR Services</h3>
+                    <p>
+                        Manage QR code batches and release paid orders
+                        after payment has been verified.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+
+                <article class="module">
+                    <div class="module-icon">💳</div>
+                    <h3>Payments</h3>
+                    <p>
+                        Track transactions and authorize paid services
+                        only after trusted payment verification.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+
+                <article class="module">
+                    <div class="module-icon">📊</div>
+                    <h3>Reports & Analytics</h3>
+                    <p>
+                        Organize attendance summaries, student performance,
+                        and service activity.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+
+                <article class="module">
+                    <div class="module-icon">🔄</div>
+                    <h3>Offline & Synchronization</h3>
+                    <p>
+                        Work during connection interruptions and synchronize
+                        saved changes safely when online again.
+                    </p>
+                    <span class="module-status">Planned</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="foundation" id="about">
+            <div class="foundation-icon">✦</div>
+            <div>
+                <h3>Building the Nexora foundation</h3>
+                <p>
+                    This is the initial visual foundation. The service cards
+                    are previews, not functioning services yet. We will
+                    build the server, secure organization accounts,
+                    report generation, and payment verification in stages.
+                    Your existing school QR project remains separate
+                    while we develop and test this platform.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2026 Nexora Technologies<br>
+        Building connected, secure digital services.
+    </footer>
+</body>
+</html>
