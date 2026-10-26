@@ -271,10 +271,9 @@
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
-                    showAccount(data.organization);
-                }
-            } catch (error) {
+    window.location.replace("/workspace.html");
+    return;
+}            } catch (error) {
                 showMessage(
                     "Couldn't check your session. Please try signing in.",
                     "error"
