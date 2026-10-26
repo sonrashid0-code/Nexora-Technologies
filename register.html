@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b1a">
+    <title>register.html</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #f3f5ff;
+            background:
+                radial-gradient(ellipse at top left, #25205c 0, transparent 45%),
+                radial-gradient(ellipse at bottom right, #073e55 0, transparent 40%),
+                #080b1a;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            padding: 32px;
+            border: 1px solid #33395b;
+            border-radius: 22px;
+            background: rgba(15, 19, 43, 0.94);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 17px;
+            color: white;
+            font-weight: 800;
+            font-size: 19px;
+            background: linear-gradient(135deg, #7c5cff, #12c9e8);
+            box-shadow: 0 8px 28px #7c5cfc44;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+            letter-spacing: -0.7px;
+        }
+
+        .subtitle {
+            color: #aeb8d7;
+            line-height: 1.6;
+            margin: 0 0 26px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #e2e8ff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            color: #f7f8ff;
+            background: #0a1025;
+            border: 1px solid #343b5d;
+            border-radius: 11px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #8c73ff;
+            box-shadow: 0 0 0 3px #7c5cff25;
+        }
+
+        .hint {
+            margin: 8px 0 0;
+            color: #9da8c9;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 15px;
+            border: 0;
+            border-radius: 11px;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            background: linear-gradient(100deg, #7858ff, #08b9dc);
+        }
+
+        button:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        #message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: #b9ffde;
+            border: 1px solid #246c55;
+            background: #103526;
+        }
+
+        #message.error {
+            display: block;
+            color: #ffd0d0;
+            border: 1px solid #743d50;
+            background: #351923;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            color: #9da8c9;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .footer a {
+            color: #9c8aff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+        <div class="logo" aria-label="Nexora logo">NX</div>
+
+        <h1>Create an organization account</h1>
+        <p class="subtitle">
+            Register your school or organization to begin setting up
+            its Nexora workspace.
+        </p>
+
+        <form id="registerForm">
+            <label for="organizationName">Organization name</label>
+            <input
+                id="organizationName"
+                name="organizationName"
+                type="text"
+                minlength="2"
+                maxlength="150"
+                autocomplete="organization"
+                placeholder="e.g. Your School Name"
+                required
+            >
+
+            <label for="email">Organization email</label>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                maxlength="254"
+                autocomplete="email"
+                placeholder="school@example.com"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                minlength="10"
+                maxlength="72"
+                autocomplete="new-password"
+                placeholder="At least 10 characters"
+                required
+            >
+            <p class="hint">
+                Use a unique password. Do not reuse a personal or school
+                account password.
+            </p>
+
+            <label for="confirmPassword">Confirm password</label>
+            <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                minlength="10"
+                maxlength="72"
+                autocomplete="new-password"
+                placeholder="Enter the password again"
+                required
+            >
+
+            <button id="submitButton" type="submit">
+                Create organization account
+            </button>
+
+            <div id="message" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="footer">
+            By registering, you confirm that you are authorized to
+            register this organization.
+            <br>
+            <a href="/">Back to Nexora homepage</a>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById("registerForm");
+        const submitButton = document.getElementById("submitButton");
+        const message = document.getElementById("message");
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = type;
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const organizationName =
+                document.getElementById("organizationName").value.trim();
+            const email =
+                document.getElementById("email").value.trim().toLowerCase();
+            const password =
+                document.getElementById("password").value;
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            message.className = "";
+            message.textContent = "";
+
+            if (password !== confirmPassword) {
+                showMessage("The passwords do not match.", "error");
+                return;
+            }
+
+            if (password.length < 10) {
+                showMessage(
+                    "Please use a password with at least 10 characters.",
+                    "error"
+                );
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Creating account...";
+
+            try {
+                const response = await fetch(
+                    "/api/organizations/register",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            organizationName,
+                            email,
+                            password
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showMessage(
+                        data.error || "Registration failed. Please try again.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showMessage(
+                    "Organization registered successfully! Your account record has been created. Login and workspace access are the next features to build.",
+                    "success"
+                );
+
+                form.reset();
+
+            } catch (error) {
+                showMessage(
+                    "Could not contact Nexora. Check your internet connection and try again.",
+                    "error"
+                );
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Create organization account";
+            }
+        });
+    </script>
+</body>
+</html>
