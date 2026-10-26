@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b1a">
+
+    <title>Organization Workspace | Nexora Technologies</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: #080b1a;
+            --panel: #111731;
+            --border: #303756;
+            --text: #f3f5ff;
+            --muted: #aeb8d7;
+            --purple: #7858ff;
+            --cyan: #5de5f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    ellipse at top left,
+                    #25205c 0,
+                    transparent 42%
+                ),
+                radial-gradient(
+                    ellipse at bottom right,
+                    #073e55 0,
+                    transparent 35%
+                ),
+                var(--background);
+        }
+
+        /* HEADER */
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+
+            padding: 17px 6%;
+
+            border-bottom: 1px solid #292f50;
+            background: rgba(10, 14, 33, 0.92);
+            backdrop-filter: blur(14px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* Official Nexora icon: always 48 x 48 pixels */
+
+        .brand img {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px;
+            max-width: 48px;
+            min-height: 48px;
+            max-height: 48px;
+
+            display: block;
+            flex: 0 0 48px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .brand-name {
+            overflow-wrap: anywhere;
+        }
+
+        .brand-name span {
+            color: var(--cyan);
+        }
+
+        button {
+            padding: 11px 17px;
+
+            border: 1px solid #454b70;
+            border-radius: 10px;
+
+            color: white;
+            background: #171d3a;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            border-color: var(--purple);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* MAIN CONTENT */
+
+        main {
+            width: 100%;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 42px 24px;
+        }
+
+        .welcome {
+            position: relative;
+            overflow: hidden;
+
+            padding: 30px;
+
+            border: 1px solid #343b5d;
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(31, 29, 76, 0.97),
+                    rgba(12, 42, 60, 0.94)
+                );
+
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+        }
+
+        .welcome::after {
+            content: "";
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            top: -100px;
+            right: -50px;
+
+            border-radius: 50%;
+            background: rgba(124, 92, 255, 0.18);
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            position: relative;
+            margin: 13px 0;
+            font-size: clamp(27px, 4vw, 39px);
+            overflow-wrap: anywhere;
+        }
+
+        .muted {
+            color: var(--muted);
+            line-height: 1.75;
+        }
+
+        .welcome-description {
+            max-width: 650px;
+            font-size: 15px;
+        }
+
+        .account {
+            position: relative;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #343b5d;
+            overflow-wrap: anywhere;
+        }
+
+        .account p {
+            margin-bottom: 0;
+        }
+
+        /* WORKSPACE MODULES */
+
+        h2 {
+            margin: 36px 0 19px;
+            font-size: 23px;
+        }
+
+        .section-description {
+            margin-top: -10px;
+            margin-bottom: 22px;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(min(100%, 235px), 1fr)
+            );
+            gap: 18px;
+        }
+
+        .module {
+            position: relative;
+            min-height: 190px;
+            padding: 23px;
+
+            border: 1px solid var(--border);
+            border-radius: 17px;
+
+            background: rgba(17, 23, 49, 0.92);
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .module:hover {
+            transform: translateY(-4px);
+            border-color: #6254a8;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+        }
+
+        .module-icon {
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+            place-items: center;
+
+            margin-bottom: 18px;
+
+            border: 1px solid #48436f;
+            border-radius: 12px;
+
+            color: #d5caff;
+            background: linear-gradient(
+                135deg,
+                rgba(120, 88, 255, 0.22),
+                rgba(8, 185, 220, 0.12)
+            );
+
+            font-size: 19px;
+        }
+
+        .module h3 {
+            margin: 0 0 11px;
+            font-size: 17px;
+        }
+
+        .module p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 17px;
+            padding: 6px 10px;
+
+            border: 1px solid #3c4262;
+            border-radius: 20px;
+
+            color: #c9c2ff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        /* STATUS AND ERRORS */
+
+        #message {
+            max-width: 650px;
+            margin: 70px auto;
+            padding: 22px;
+
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        #message.error {
+            border: 1px solid #743d50;
+            border-radius: 14px;
+            color: #ffd0d0;
+            background: #351923;
+        }
+
+        footer {
+            padding: 25px 16px;
+            border-top: 1px solid #252b48;
+            color: #8994b6;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            header {
+                padding: 14px 16px;
+                gap: 12px;
+            }
+
+            .brand {
+                gap: 9px;
+                font-size: 14px;
+                letter-spacing: 0.4px;
+            }
+
+            .brand img {
+                width: 48px !important;
+                height: 48px !important;
+                min-width: 48px;
+                max-width: 48px;
+                flex-basis: 48px;
+            }
+
+            header button {
+                padding: 10px 12px;
+                flex-shrink: 0;
+            }
+
+            main {
+                padding: 26px 16px;
+            }
+
+            .welcome {
+                padding: 23px 20px;
+            }
+
+            h2 {
+                font-size: 21px;
+            }
+
+            .module {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <img
+                src="/nexora-icon.webp"
+                alt="Nexora Technologies logo"
+                width="48"
+                height="48"
+            >
+
+            <div class="brand-name">
+                NEXORA <span>TECHNOLOGIES</span>
+            </div>
+        </div>
+
+        <button id="logoutButton" type="button">
+            Sign out
+        </button>
+    </header>
+
+    <!-- Shown only after the server verifies the organization session -->
+    <main id="mainContent" hidden>
+
+        <section class="welcome">
+            <div class="eyebrow">Organization workspace</div>
+
+            <h1>
+                Welcome,
+                <span id="organizationName">Organization</span>
+            </h1>
+
+            <p class="muted welcome-description">
+                Welcome to your organization's space on Nexora.
+                Your tools and services will be organized here.
+            </p>
+
+            <div class="account">
+                <div class="eyebrow">Signed-in account</div>
+                <p class="muted" id="organizationEmail"></p>
+            </div>
+        </section>
+
+        <h2>Your workspace tools</h2>
+
+        <p class="muted section-description">
+            Your organization's services, together in one place.
+        </p>
+
+        <section class="grid">
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">▤</div>
+                <h3>Student Report Generator</h3>
+                <p>
+                    Prepare, save, and manage student reports by term.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">▦</div>
+                <h3>QR Services</h3>
+                <p>
+                    Organize QR code generation and attendance services.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">♙</div>
+                <h3>Student Management</h3>
+                <p>
+                    Manage student and school records within your organization.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">▥</div>
+                <h3>Reports &amp; Analytics</h3>
+                <p>
+                    Review organization activity and reports.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">▱</div>
+                <h3>Files &amp; Documents</h3>
+                <p>
+                    Prepare a dedicated area for organization documents.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+            <article class="module">
+                <div class="module-icon" aria-hidden="true">⚙</div>
+                <h3>Organization Settings</h3>
+                <p>
+                    Manage your organization's profile and account settings.
+                </p>
+                <span class="status">PLANNED</span>
+            </article>
+
+        </section>
+
+        <p class="muted" style="margin-top: 25px; font-size: 12px;">
+            These tools are previews. Their functionality and access
+            controls will be built and tested before real organization
+            data is stored or processed.
+        </p>
+
+    </main>
+
+    <div id="message" role="status" aria-live="polite">
+        Checking your organization account...
+    </div>
+
+    <footer>
+        Nexora Technologies · One platform. Many possibilities.
+    </footer>
+
+    <script>
+        const mainContent = document.getElementById("mainContent");
+        const message = document.getElementById("message");
+        const logoutButton = document.getElementById("logoutButton");
+
+        async function loadWorkspace() {
+            try {
+                const response = await fetch("/api/organizations/me", {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                });
+
+                if (response.status === 401) {
+                    window.location.replace("/login.html");
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error("Could not verify your account.");
+                }
+
+                const data = await response.json();
+
+                if (!data.organization) {
+                    throw new Error("Organization information is missing.");
+                }
+
+                const organization = data.organization;
+
+                document.getElementById("organizationName").textContent =
+                    organization.organization_name;
+
+                document.getElementById("organizationEmail").textContent =
+                    organization.email;
+
+                message.hidden = true;
+                mainContent.hidden = false;
+
+            } catch (error) {
+                console.error("Workspace loading failed:", error);
+
+                message.className = "error";
+                message.textContent =
+                    "We couldn't verify your organization account. " +
+                    "Please refresh the page or sign in again.";
+            }
+        }
+
+        logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+            logoutButton.textContent = "Signing out...";
+
+            try {
+                const response = await fetch(
+                    "/api/organizations/logout",
+                    {
+                        method: "POST",
+                        credentials: "same-origin"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Sign-out failed.");
+                }
+
+                window.location.replace("/login.html");
+
+            } catch (error) {
+                console.error("Sign-out failed:", error);
+
+                message.hidden = false;
+                message.className = "error";
+                message.textContent =
+                    "Could not sign out. Please try again.";
+
+                logoutButton.disabled = false;
+                logoutButton.textContent = "Sign out";
+            }
+        });
+
+        loadWorkspace();
+    </script>
+
+</body>
+</html>
