@@ -18,6 +18,19 @@ const pool = new Pool({
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
+async function initializeDatabase() {
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS organizations (
+            id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            organization_name VARCHAR(150) NOT NULL,
+            email VARCHAR(254) NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+    `);
+
+    console.log("Organizations table is ready.");
+}
 
 app.get("/api/health", async (req, res) => {
     try {
@@ -39,8 +52,15 @@ app.get("/api/health", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(
-        `Nexora Technologies is running on port ${PORT}`
-    );
-});
+initializeDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(
+                `Nexora Technologies is running on port ${PORT}`
+            );
+        });
+    })
+    .catch((error) => {
+        console.error("Database initialization failed:", error.message);
+        process.exit(1);
+    });
