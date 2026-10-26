@@ -1,0 +1,362 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b1a">
+    <title>Organization Login | Nexora Technologies</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #f3f5ff;
+            background:
+                radial-gradient(ellipse at top left, #25205c 0, transparent 45%),
+                radial-gradient(ellipse at bottom right, #073e55 0, transparent 40%),
+                #080b1a;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            padding: 32px;
+            border: 1px solid #33395b;
+            border-radius: 22px;
+            background: rgba(15, 19, 43, 0.96);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 17px;
+            margin-bottom: 22px;
+            color: white;
+            font-size: 19px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7c5cff, #12c9e8);
+            box-shadow: 0 8px 28px #7c5cff44;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+            letter-spacing: -0.7px;
+        }
+
+        .subtitle {
+            margin: 0 0 26px;
+            color: #aeb8d7;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #e2e8ff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #343b5d;
+            border-radius: 11px;
+            outline: none;
+            color: #f7f8ff;
+            background: #0a1025;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #8c73ff;
+            box-shadow: 0 0 0 3px #7c5cff25;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 23px;
+            padding: 15px;
+            border: 0;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(100deg, #7858ff, #08b9dc);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .secondary {
+            border: 1px solid #41496c;
+            background: #171d3a;
+        }
+
+        #message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: #b9ffde;
+            border: 1px solid #246c55;
+            background: #103526;
+        }
+
+        #message.error {
+            display: block;
+            color: #ffd0d0;
+            border: 1px solid #743d50;
+            background: #351923;
+        }
+
+        #accountPanel {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border: 1px solid #33395b;
+            border-radius: 13px;
+            background: #0a1025;
+        }
+
+        #accountPanel h2 {
+            margin: 0 0 12px;
+            font-size: 19px;
+        }
+
+        #accountPanel p {
+            margin: 8px 0;
+            color: #c6cce5;
+            overflow-wrap: anywhere;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            color: #9da8c9;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        a {
+            color: #a99aff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+        <div class="logo" aria-label="Nexora logo">NX</div>
+
+        <h1>Welcome back</h1>
+        <p class="subtitle">
+            Sign in to your Nexora organization account.
+        </p>
+
+        <form id="loginForm">
+            <label for="email">Organization email</label>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                maxlength="254"
+                autocomplete="username"
+                placeholder="you@example.com"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button id="loginButton" type="submit">
+                Sign in
+            </button>
+        </form>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <section id="accountPanel" aria-live="polite">
+            <h2>You're signed in</h2>
+            <p><strong>Organization:</strong> <span id="orgName"></span></p>
+            <p><strong>Email:</strong> <span id="orgEmail"></span></p>
+            <p>Your login session is active.</p>
+            <button id="logoutButton" class="secondary" type="button">
+                Sign out
+            </button>
+        </section>
+
+        <div class="footer">
+            Don't have an organization account?
+            <br>
+            <a href="/register.html">Register your organization</a>
+            <br>
+            <a href="/">Back to Nexora homepage</a>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const logoutButton = document.getElementById("logoutButton");
+        const message = document.getElementById("message");
+        const accountPanel = document.getElementById("accountPanel");
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = type;
+        }
+
+        function showAccount(organization) {
+            document.getElementById("orgName").textContent =
+                organization.organization_name;
+            document.getElementById("orgEmail").textContent =
+                organization.email;
+
+            form.style.display = "none";
+            accountPanel.style.display = "block";
+            message.className = "";
+            message.textContent = "";
+        }
+
+        function showLoginForm() {
+            form.style.display = "block";
+            accountPanel.style.display = "none";
+        }
+
+        async function checkExistingSession() {
+            try {
+                const response = await fetch("/api/organizations/me", {
+                    credentials: "same-origin"
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showAccount(data.organization);
+                }
+            } catch (error) {
+                showMessage(
+                    "Couldn't check your session. Please try signing in.",
+                    "error"
+                );
+            }
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value
+                .trim().toLowerCase();
+            const password = document.getElementById("password").value;
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+            message.className = "";
+            message.textContent = "";
+
+            try {
+                const response = await fetch(
+                    "/api/organizations/login",
+                    {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showMessage(
+                        data.error || "Sign-in failed. Please try again.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showAccount(data.organization);
+            } catch (error) {
+                showMessage(
+                    "Couldn't contact Nexora. Check your connection and try again.",
+                    "error"
+                );
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign in";
+            }
+        });
+
+        logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+
+            try {
+                const response = await fetch(
+                    "/api/organizations/logout",
+                    {
+                        method: "POST",
+                        credentials: "same-origin"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Logout failed");
+                }
+
+                form.reset();
+                showLoginForm();
+                showMessage("You've signed out successfully.", "success");
+            } catch (error) {
+                showMessage(
+                    "Couldn't sign out. Please try again.",
+                    "error"
+                );
+            } finally {
+                logoutButton.disabled = false;
+            }
+        });
+
+        checkExistingSession();
+    </script>
+</body>
+</html>
