@@ -80,13 +80,13 @@
         }
 
         <img
+    class="logo"
     src="/nexora-icon.webp"
-    alt="Nexora Technologies"
+    alt="Nexora Technologies logo"
     width="48"
     height="48"
-    style="width:48px !important;height:48px !important;max-width:48px;max-height:48px;object-fit:contain;display:block;"
->
-        .brand h1 {
+    style="width:48px !important;height:48px !important;max-width:48px;max-height:48px;object-fit:contain;display:block;flex:0 0 48px;"
+>        .brand h1 {
             font-size: 19px;
             letter-spacing: 0.2px;
         }
@@ -365,10 +365,13 @@
             }
 
             .logo {
-                width: 42px;
-                height: 42px;
-            }
-
+    width: 48px;
+    height: 48px;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
             main {
                 padding: 25px 5%;
             }
