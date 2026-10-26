@@ -37,25 +37,17 @@
         }
 
                }
-.logo {
+..logo {
     width: 66px;
     height: 66px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(151, 212, 255, 0.35);
-    border-radius: 19px;
+    display: block;
+    object-fit: contain;
+    border-radius: 17px;
     margin-bottom: 22px;
-    background: linear-gradient(135deg, #7858ff, #087f9c);
-    box-shadow:
-        0 0 24px rgba(124, 92, 255, 0.3),
+}        0 0 24px rgba(124, 92, 255, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.logo svg {
-    width: 43px;
-    height: 43px;
-    display: block;
-}
         h1 {
             margin: 0 0 10px;
             font-size: 28px;
@@ -184,29 +176,12 @@
 
 <body>
     <main class="card">
-        <div class="logo" role="img" aria-label="Nexora Technologies logo">
-    <svg viewBox="0 0 48 48"
-         xmlns="http://www.w3.org/2000/svg"
-         aria-hidden="true">
-        <path
-            d="M7 36V12L23 36V12"
-            fill="none"
-            stroke="#FFFFFF"
-            stroke-width="4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-        <path
-            d="M29 13L41 35M41 13L29 35"
-            fill="none"
-            stroke="#8DF7FF"
-            stroke-width="4"
-            stroke-linecap="round"
-        />
-    </svg>
-</div>
-
-        <h1>Welcome back</h1>
+    <img
+    class="logo"
+    src="/nexora-icon.webp"
+    alt="Nexora Technologies logo"
+>
+                <h1>Welcome back</h1>
         <p class="subtitle">
             Sign in to your Nexora organization account.
         </p>
