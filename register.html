@@ -37,18 +37,13 @@
         }
 
         .logo {
-            width: 58px;
-            height: 58px;
-            display: grid;
-            place-items: center;
-            border-radius: 17px;
-            color: white;
-            font-weight: 800;
-            font-size: 19px;
-            background: linear-gradient(135deg, #7c5cff, #12c9e8);
-            box-shadow: 0 8px 28px #7c5cfc44;
-            margin-bottom: 22px;
-        }
+    width: 48px;
+    height: 48px;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
 
         h1 {
             margin: 0 0 10px;
@@ -163,7 +158,14 @@
 
 <body>
     <main class="card">
-        <div class="logo" aria-label="Nexora logo">NX</div>
+        <img
+    class="logo"
+    src="/nexora-icon.webp"
+    alt="Nexora Technologies logo"
+    width="48"
+    height="48"
+    style="width:48px !important;height:48px !important;max-width:48px;max-height:48px;object-fit:contain;display:block;margin-bottom:18px;"
+>
 
         <h1>Create an organization account</h1>
         <p class="subtitle">
