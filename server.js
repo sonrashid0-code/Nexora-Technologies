@@ -319,6 +319,115 @@ app.post("/api/organizations/logout", (req, res) => {
         });
     });
 });
+// List students belonging only to the signed-in organization.
+app.get("/api/students", async (req, res) => {
+    try {
+        const organizationId = req.session.organizationId;
+
+        if (!organizationId) {
+            return res.status(401).json({
+                error: "Please log in first."
+            });
+        }
+
+        const result = await pool.query(
+            `SELECT id, student_number, full_name, class_name, created_at
+             FROM students
+             WHERE organization_id = $1
+             ORDER BY full_name ASC`,
+            [organizationId]
+        );
+
+        return res.json({
+            students: result.rows
+        });
+
+    } catch (error) {
+        console.error("Loading students failed:", error.message);
+
+        return res.status(500).json({
+            error: "Could not load students."
+        });
+    }
+});
+
+
+// Add a student to the signed-in organization's records.
+app.post("/api/students", async (req, res) => {
+    try {
+        const organizationId = req.session.organizationId;
+
+        if (!organizationId) {
+            return res.status(401).json({
+                error: "Please log in first."
+            });
+        }
+
+        const body = req.body || {};
+
+        const studentNumber =
+            typeof body.studentNumber === "string"
+                ? body.studentNumber.trim()
+                : "";
+
+        const fullName =
+            typeof body.fullName === "string"
+                ? body.fullName.trim()
+                : "";
+
+        const className =
+            typeof body.className === "string"
+                ? body.className.trim()
+                : "";
+
+        if (
+            studentNumber.length < 1 ||
+            studentNumber.length > 50
+        ) {
+            return res.status(400).json({
+                error: "Student number must be 1–50 characters."
+            });
+        }
+
+        if (fullName.length < 2 || fullName.length > 150) {
+            return res.status(400).json({
+                error: "Student name must be 2–150 characters."
+            });
+        }
+
+        if (className.length < 1 || className.length > 80) {
+            return res.status(400).json({
+                error: "Class must be 1–80 characters."
+            });
+        }
+
+        const result = await pool.query(
+            `INSERT INTO students
+                (organization_id, student_number, full_name, class_name)
+             VALUES ($1, $2, $3, $4)
+             RETURNING id, student_number, full_name, class_name, created_at`,
+            [organizationId, studentNumber, fullName, className]
+        );
+
+        return res.status(201).json({
+            message: "Student added successfully.",
+            student: result.rows[0]
+        });
+
+    } catch (error) {
+        if (error.code === "23505") {
+            return res.status(409).json({
+                error: "That student number already exists in your organization."
+            });
+        }
+
+        console.error("Adding student failed:", error.message);
+
+        return res.status(500).json({
+            error: "Could not add student."
+        });
+    }
+});
 initializeDatabase()
     .then(() => {
         app.listen(PORT, () => {
