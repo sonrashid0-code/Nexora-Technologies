@@ -44,6 +44,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 async function initializeDatabase() {
+    // Organization accounts
     await pool.query(`
         CREATE TABLE IF NOT EXISTS organizations (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -55,8 +56,50 @@ async function initializeDatabase() {
     `);
 
     console.log("Organizations table is ready.");
-}
 
+    // Students belong to a specific organization.
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS students (
+            id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            organization_id BIGINT NOT NULL
+                REFERENCES organizations(id) ON DELETE CASCADE,
+            student_number VARCHAR(50) NOT NULL,
+            full_name VARCHAR(150) NOT NULL,
+            class_name VARCHAR(80) NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+            UNIQUE (organization_id, student_number),
+            UNIQUE (organization_id, id)
+        )
+    `);
+
+    // Reports belong to the same organization as their student.
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS student_reports (
+            id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            organization_id BIGINT NOT NULL
+                REFERENCES organizations(id) ON DELETE CASCADE,
+            student_id BIGINT NOT NULL,
+            academic_year VARCHAR(20) NOT NULL,
+            term VARCHAR(30) NOT NULL,
+            report_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+            FOREIGN KEY (organization_id, student_id)
+                REFERENCES students (organization_id, id)
+                ON DELETE CASCADE,
+
+            UNIQUE (
+                organization_id,
+                student_id,
+                academic_year,
+                term
+            )
+        )
+    `);
+
+        console.log("Student and report tables are ready.");
+}
 app.get("/api/health", async (req, res) => {
     try {
         const result = await pool.query(
