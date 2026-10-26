@@ -11,8 +11,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-  "bcryptjs": "^2.4.3",
-  "express": "^4.21.2",
-  "express-session": "^1.18.2",
-  "pg": "^8.16.3"
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "pg": "^8.23.1"
+  }
 }
