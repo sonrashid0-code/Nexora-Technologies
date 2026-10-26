@@ -1,21 +1,46 @@
-﻿
-const express = require("express");
+﻿const express = require("express");
 const path = require("path");
+const { Pool } = require("pg");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
-// Allow the server to read JSON requests later.
 app.use(express.json());
-
-// Serve the Nexora website files.
 app.use(express.static(__dirname));
 
-// Open the homepage.
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL
+        ? false
+        : undefined
+});
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
+app.get("/api/health", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT NOW() AS database_time"
+        );
+
+        res.json({
+            status: "connected",
+            database: "Nexora PostgreSQL",
+            time: result.rows[0].database_time
+        });
+    } catch (error) {
+        console.error("Database connection failed:", error.message);
+        res.status(500).json({
+            status: "error",
+            message: "Database connection failed"
+        });
+    }
+});
+
 app.listen(PORT, () => {
-    console.log(`Nexora Technologies is running at http://localhost:${PORT}`);
+    console.log(
+        `Nexora Technologies is running on port ${PORT}`
+    );
 });
