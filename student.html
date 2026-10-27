@@ -1,0 +1,613 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b1a">
+    <title>Student Management | Nexora Technologies</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b1a;
+            --panel: #111731;
+            --border: #303756;
+            --text: #f3f5ff;
+            --muted: #aeb8d7;
+            --purple: #7858ff;
+            --cyan: #5de5f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at top left, #25205c, transparent 42%),
+                radial-gradient(ellipse at bottom right, #073e55, transparent 35%),
+                var(--bg);
+        }
+
+        /* HEADER AND OFFICIAL NEXORA ICON */
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 16px 6%;
+            border-bottom: 1px solid #292f50;
+            background: rgba(10, 14, 33, 0.94);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+        }
+
+        .brand img {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px;
+            max-width: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            display: block;
+            flex: 0 0 48px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .brand span {
+            color: var(--cyan);
+        }
+
+        button,
+        .back-link {
+            padding: 11px 15px;
+            border: 1px solid #454b70;
+            border-radius: 10px;
+            color: white;
+            background: #171d3a;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover,
+        .back-link:hover {
+            border-color: var(--purple);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        /* PAGE CONTENT */
+
+        main {
+            max-width: 1150px;
+            margin: auto;
+            padding: 36px 22px;
+        }
+
+        .heading {
+            margin-bottom: 26px;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: clamp(28px, 4vw, 38px);
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.4fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            min-width: 0;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(17, 23, 49, 0.94);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #e2e8ff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #343b5d;
+            border-radius: 10px;
+            outline: none;
+            color: var(--text);
+            background: #0a1025;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #8c73ff;
+            box-shadow: 0 0 0 3px #7c5cff25;
+        }
+
+        .primary {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: 0;
+            background: linear-gradient(100deg, #7858ff, #08b9dc);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #303756;
+        }
+
+        th {
+            color: #c9c2ff;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #e6eaff;
+            overflow-wrap: anywhere;
+        }
+
+        #message {
+            display: none;
+            margin: 18px 0;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: #b9ffde;
+            border: 1px solid #246c55;
+            background: #103526;
+        }
+
+        #message.error {
+            display: block;
+            color: #ffd0d0;
+            border: 1px solid #743d50;
+            background: #351923;
+        }
+
+        .empty {
+            padding: 24px 5px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 25px 16px;
+            border-top: 1px solid #252b48;
+            color: #8994b6;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            header {
+                padding: 12px 14px;
+            }
+
+            .brand {
+                gap: 8px;
+                font-size: 12px;
+            }
+
+            .brand img {
+                width: 48px !important;
+                height: 48px !important;
+                min-width: 48px;
+                max-width: 48px;
+                flex-basis: 48px;
+            }
+
+            main {
+                padding: 25px 14px;
+            }
+
+            .panel {
+                padding: 19px;
+            }
+
+            th,
+            td {
+                padding: 11px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <img
+                src="/nexora-icon.webp"
+                alt="Nexora Technologies logo"
+                width="48"
+                height="48"
+            >
+            <div>NEXORA <span>TECHNOLOGIES</span></div>
+        </div>
+
+        <a class="back-link" href="/workspace.html">Workspace</a>
+    </header>
+
+    <main id="mainContent" hidden>
+
+        <section class="heading">
+            <div class="eyebrow">Organization tools</div>
+            <h1>Student Management</h1>
+
+            <p class="muted">
+                Add students and view the records belonging to your organization.
+            </p>
+
+            <p class="muted">
+                Organization: <strong id="organizationName"></strong>
+            </p>
+        </section>
+
+        <div class="layout">
+
+            <!-- ADD STUDENT FORM -->
+
+            <section class="panel">
+                <h2>Add a student</h2>
+
+                <p class="muted">
+                    Enter the student's school number, name and class.
+                </p>
+
+                <form id="studentForm">
+
+                    <label for="studentNumber">Student number</label>
+                    <input
+                        id="studentNumber"
+                        name="studentNumber"
+                        type="text"
+                        maxlength="50"
+                        placeholder="e.g. ST002"
+                        required
+                    >
+
+                    <label for="fullName">Full name</label>
+                    <input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        minlength="2"
+                        maxlength="150"
+                        placeholder="Student's full name"
+                        required
+                    >
+
+                    <label for="className">Class</label>
+                    <input
+                        id="className"
+                        name="className"
+                        type="text"
+                        maxlength="80"
+                        placeholder="e.g. Senior 3"
+                        required
+                    >
+
+                    <button class="primary" id="addButton" type="submit">
+                        Add student
+                    </button>
+
+                </form>
+
+                <div id="message" role="status" aria-live="polite"></div>
+            </section>
+
+            <!-- STUDENT RECORDS TABLE -->
+
+            <section class="panel">
+                <h2>Student records</h2>
+
+                <p class="muted">
+                    These records are loaded from your organization's database.
+                </p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student No.</th>
+                                <th>Full name</th>
+                                <th>Class</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="studentList"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty" id="emptyMessage">
+                    Loading student records...
+                </div>
+
+                <button type="button" id="refreshButton">
+                    Refresh records
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="loadingMessage" class="empty" role="status" aria-live="polite">
+        Checking your organization account...
+    </div>
+
+    <footer>
+        Nexora Technologies · Organization Student Management
+    </footer>
+
+    <script>
+        const mainContent = document.getElementById("mainContent");
+        const loadingMessage = document.getElementById("loadingMessage");
+        const studentForm = document.getElementById("studentForm");
+        const addButton = document.getElementById("addButton");
+        const refreshButton = document.getElementById("refreshButton");
+        const message = document.getElementById("message");
+        const studentList = document.getElementById("studentList");
+        const emptyMessage = document.getElementById("emptyMessage");
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = type;
+        }
+
+        async function checkAccount() {
+            try {
+                const response = await fetch("/api/organizations/me", {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                });
+
+                if (response.status === 401) {
+                    window.location.replace("/login.html");
+                    return false;
+                }
+
+                if (!response.ok) {
+                    throw new Error("Account check failed.");
+                }
+
+                const data = await response.json();
+
+                document.getElementById("organizationName").textContent =
+                    data.organization.organization_name;
+
+                loadingMessage.hidden = true;
+                mainContent.hidden = false;
+
+                return true;
+
+            } catch (error) {
+                loadingMessage.textContent =
+                    "We couldn't verify your account. Please refresh or sign in again.";
+
+                return false;
+            }
+        }
+
+        async function loadStudents() {
+            refreshButton.disabled = true;
+            emptyMessage.hidden = false;
+            emptyMessage.textContent = "Loading student records...";
+            studentList.replaceChildren();
+
+            try {
+                const response = await fetch("/api/students", {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                });
+
+                if (response.status === 401) {
+                    window.location.replace("/login.html");
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || "Could not load students."
+                    );
+                }
+
+                if (!Array.isArray(data.students)) {
+                    throw new Error(
+                        "The server returned an unexpected response."
+                    );
+                }
+
+                for (const student of data.students) {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        student.student_number,
+                        student.full_name,
+                        student.class_name
+                    ];
+
+                    for (const value of values) {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    }
+
+                    studentList.appendChild(row);
+                }
+
+                emptyMessage.hidden = data.students.length > 0;
+
+                if (data.students.length === 0) {
+                    emptyMessage.textContent =
+                        "No students added yet. Use the form to add the first student.";
+                }
+
+            } catch (error) {
+                emptyMessage.hidden = false;
+                emptyMessage.textContent = error.message;
+
+            } finally {
+                refreshButton.disabled = false;
+            }
+        }
+
+        studentForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            addButton.disabled = true;
+            addButton.textContent = "Adding student...";
+            message.className = "";
+            message.textContent = "";
+
+            const student = {
+                studentNumber:
+                    document.getElementById("studentNumber").value.trim(),
+
+                fullName:
+                    document.getElementById("fullName").value.trim(),
+
+                className:
+                    document.getElementById("className").value.trim()
+            };
+
+            try {
+                const response = await fetch("/api/students", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(student)
+                });
+
+                const data = await response.json();
+
+                if (response.status === 401) {
+                    window.location.replace("/login.html");
+                    return;
+                }
+
+                if (!response.ok) {
+                    showMessage(
+                        data.error || "Could not add this student.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showMessage("Student added successfully.", "success");
+
+                studentForm.reset();
+
+                await loadStudents();
+
+            } catch (error) {
+                showMessage(
+                    "Couldn't contact Nexora. Check your connection and try again.",
+                    "error"
+                );
+
+            } finally {
+                addButton.disabled = false;
+                addButton.textContent = "Add student";
+            }
+        });
+
+        refreshButton.addEventListener("click", loadStudents);
+
+        async function startPage() {
+            const accountReady = await checkAccount();
+
+            if (accountReady) {
+                await loadStudents();
+            }
+        }
+
+        startPage();
+    </script>
+
+</body>
+</html>
