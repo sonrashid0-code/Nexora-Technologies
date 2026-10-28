@@ -237,6 +237,17 @@
                 border-color 0.2s ease,
                 box-shadow 0.2s ease;
         }
+        .module-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.module-link:focus-visible {
+    outline: 2px solid #5de5f5;
+    outline-offset: 4px;
+}
 
         .module:hover {
             transform: translateY(-4px);
@@ -439,14 +450,17 @@
                 <span class="status">PLANNED</span>
             </article>
 
-            <article class="module">
-                <div class="module-icon" aria-hidden="true">♙</div>
-                <h3>Student Management</h3>
-                <p>
-                    Manage student and school records within your organization.
-                </p>
-                <span class="status">PLANNED</span>
-            </article>
+            <a class="module module-link" href="/students.html">
+    <div class="module-icon" aria-hidden="true">♙</div>
+
+    <h3>Student Management</h3>
+
+    <p>
+        Add students and view the records belonging to your organization.
+    </p>
+
+    <span class="status">OPEN STUDENT MANAGEMENT →</span>
+</a>            
 
             <article class="module">
                 <div class="module-icon" aria-hidden="true">▥</div>
