@@ -428,6 +428,227 @@ app.post("/api/students", async (req, res) => {
         });
     }
 });
+// List reports belonging only to the signed-in organization.
+app.get("/api/reports", async (req, res) => {
+    try {
+        const organizationId = req.session.organizationId;
+
+        if (!organizationId) {
+            return res.status(401).json({
+                error: "Please log in first."
+            });
+        }
+
+        const result = await pool.query(
+            `SELECT
+                r.id,
+                r.student_id,
+                s.student_number,
+                s.full_name,
+                s.class_name,
+                r.academic_year,
+                r.term,
+                r.report_data,
+                r.created_at
+             FROM student_reports AS r
+             JOIN students AS s
+               ON s.id = r.student_id
+              AND s.organization_id = r.organization_id
+             WHERE r.organization_id = $1
+             ORDER BY r.created_at DESC`,
+            [organizationId]
+        );
+
+        return res.json({
+            reports: result.rows
+        });
+    } catch (error) {
+        console.error("Loading reports failed:", error.message);
+
+        return res.status(500).json({
+            error: "Could not load student reports."
+        });
+    }
+});
+
+
+// Save a report for a student in the signed-in organization.
+app.post("/api/reports", async (req, res) => {
+    try {
+        const organizationId = req.session.organizationId;
+
+        if (!organizationId) {
+            return res.status(401).json({
+                error: "Please log in first."
+            });
+        }
+
+        const body = req.body || {};
+        const studentId = Number(body.studentId);
+        const academicYear =
+            typeof body.academicYear === "string"
+                ? body.academicYear.trim()
+                : "";
+        const term =
+            typeof body.term === "string"
+                ? body.term.trim()
+                : "";
+        const reportData = body.reportData;
+
+        if (!Number.isSafeInteger(studentId) || studentId < 1) {
+            return res.status(400).json({
+                error: "Select a valid student."
+            });
+        }
+
+        if (!academicYear || academicYear.length > 20) {
+            return res.status(400).json({
+                error: "Enter a valid academic year."
+            });
+        }
+
+        if (!term || term.length > 30) {
+            return res.status(400).json({
+                error: "Enter a valid term."
+            });
+        }
+
+        if (
+            !reportData ||
+            typeof reportData !== "object" ||
+            Array.isArray(reportData)
+        ) {
+            return res.status(400).json({
+                error: "Report data is required."
+            });
+        }
+
+        if (
+            !Array.isArray(reportData.subjects) ||
+            reportData.subjects.length < 1 ||
+            reportData.subjects.length > 20
+        ) {
+            return res.status(400).json({
+                error: "Enter between 1 and 20 subject results."
+            });
+        }
+
+        const subjects = [];
+
+        for (const item of reportData.subjects) {
+            if (!item || typeof item !== "object") {
+                return res.status(400).json({
+                    error: "Each subject result must be valid."
+                });
+            }
+
+            const subject =
+                typeof item.subject === "string"
+                    ? item.subject.trim()
+                    : "";
+
+            const score = Number(item.score);
+
+            const grade =
+                typeof item.grade === "string"
+                    ? item.grade.trim()
+                    : "";
+
+            if (!subject || subject.length > 80) {
+                return res.status(400).json({
+                    error: "Subject names must be 1–80 characters."
+                });
+            }
+
+            if (
+                item.score === "" ||
+                item.score === null ||
+                !Number.isFinite(score) ||
+                score < 0 ||
+                score > 100
+            ) {
+                return res.status(400).json({
+                    error: "Subject scores must be between 0 and 100."
+                });
+            }
+
+            if (grade.length > 10) {
+                return res.status(400).json({
+                    error: "A grade cannot exceed 10 characters."
+                });
+            }
+
+            subjects.push({
+                subject,
+                score,
+                grade
+            });
+        }
+
+        const teacherComment =
+            typeof reportData.teacherComment === "string"
+                ? reportData.teacherComment.trim()
+                : "";
+
+        if (teacherComment.length > 1000) {
+            return res.status(400).json({
+                error: "Teacher comments cannot exceed 1000 characters."
+            });
+        }
+
+        // Confirm the student belongs to this organization.
+        const studentCheck = await pool.query(
+            `SELECT id
+             FROM students
+             WHERE id = $1 AND organization_id = $2`,
+            [studentId, organizationId]
+        );
+
+        if (studentCheck.rows.length === 0) {
+            return res.status(404).json({
+                error: "Student not found in your organization."
+            });
+        }
+
+        const normalizedReport = {
+            subjects,
+            teacherComment
+        };
+
+        const result = await pool.query(
+            `INSERT INTO student_reports
+                (organization_id, student_id, academic_year, term, report_data)
+             VALUES ($1, $2, $3, $4, $5::jsonb)
+             RETURNING id, student_id, academic_year, term,
+                       report_data, created_at`,
+            [
+                organizationId,
+                studentId,
+                academicYear,
+                term,
+                JSON.stringify(normalizedReport)
+            ]
+        );
+
+        return res.status(201).json({
+            message: "Student report saved successfully.",
+            report: result.rows[0]
+        });
+
+    } catch (error) {
+        if (error.code === "23505") {
+            return res.status(409).json({
+                error: "A report already exists for this student, year and term."
+            });
+        }
+
+        console.error("Saving report failed:", error.message);
+
+        return res.status(500).json({
+            error: "Could not save the student report."
+        });
+    }
+});
 initializeDatabase()
     .then(() => {
         app.listen(PORT, () => {

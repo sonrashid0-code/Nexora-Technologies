@@ -1,0 +1,864 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b1a">
+    <title>Student Report Generator | Nexora Technologies</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b1a;
+            --panel: #111731;
+            --border: #303756;
+            --text: #f3f5ff;
+            --muted: #aeb8d7;
+            --purple: #7858ff;
+            --cyan: #5de5f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at top left, #25205c, transparent 42%),
+                radial-gradient(ellipse at bottom right, #073e55, transparent 35%),
+                var(--bg);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 15px 6%;
+            border-bottom: 1px solid #292f50;
+            background: rgba(10, 14, 33, 0.94);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+        }
+
+        .brand img {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px;
+            max-width: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            display: block;
+            flex: 0 0 48px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .brand span {
+            color: var(--cyan);
+        }
+
+        .back-link {
+            padding: 10px 14px;
+            border: 1px solid #454b70;
+            border-radius: 10px;
+            color: white;
+            background: #171d3a;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1150px;
+            margin: auto;
+            padding: 34px 22px;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: clamp(28px, 4vw, 38px);
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .panel {
+            margin-top: 24px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(17, 23, 49, 0.94);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+            margin-top: 22px;
+        }
+
+        label {
+            display: block;
+            margin: 0 0 8px;
+            color: #e2e8ff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #343b5d;
+            border-radius: 10px;
+            outline: none;
+            color: var(--text);
+            background: #0a1025;
+            font: inherit;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #8c73ff;
+            box-shadow: 0 0 0 3px #7c5cff25;
+        }
+
+        .subjects-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .subject-row {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(90px, 0.8fr) minmax(90px, 0.8fr);
+            gap: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #303756;
+            border-radius: 12px;
+            background: #0d132b;
+        }
+
+        .subject-row label {
+            font-size: 12px;
+        }
+
+        button {
+            padding: 12px 16px;
+            border: 1px solid #454b70;
+            border-radius: 10px;
+            color: white;
+            background: #171d3a;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:hover {
+            border-color: var(--purple);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .primary {
+            border: none;
+            background: linear-gradient(100deg, #7858ff, #08b9dc);
+        }
+
+        .save-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .comment-field {
+            margin-top: 23px;
+        }
+
+        #message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: #b9ffde;
+            border: 1px solid #246c55;
+            background: #103526;
+        }
+
+        #message.error {
+            display: block;
+            color: #ffd0d0;
+            border: 1px solid #743d50;
+            background: #351923;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #303756;
+            overflow-wrap: anywhere;
+        }
+
+        th {
+            color: #c9c2ff;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #e6eaff;
+        }
+
+        .empty {
+            padding: 20px 5px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        footer {
+            margin-top: 25px;
+            padding: 25px 16px;
+            border-top: 1px solid #252b48;
+            color: #8994b6;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 12px 15px;
+            }
+
+            .brand {
+                gap: 8px;
+                font-size: 12px;
+            }
+
+            main {
+                padding: 25px 14px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subject-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .subject-name {
+                grid-column: 1 / -1;
+            }
+
+            .subjects-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            th,
+            td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <img
+            src="/nexora-icon.webp"
+            alt="Nexora Technologies logo"
+            width="48"
+            height="48"
+        >
+        <div>NEXORA <span>TECHNOLOGIES</span></div>
+    </div>
+
+    <a class="back-link" href="/workspace.html">Workspace</a>
+</header>
+
+<main id="mainContent" hidden>
+
+    <div class="eyebrow">Academic tools</div>
+    <h1>Student Report Generator</h1>
+
+    <p class="muted">
+        Create and save a student's report for a selected academic year and term.
+    </p>
+
+    <p class="muted">
+        Organization: <strong id="organizationName"></strong>
+    </p>
+
+    <section class="panel">
+        <h2>Create a student report</h2>
+
+        <p class="muted">
+            Select a student and enter the subject results.
+        </p>
+
+        <form id="reportForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="studentId">Student</label>
+                    <select id="studentId" required>
+                        <option value="">Loading students...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="academicYear">Academic year</label>
+                    <input
+                        id="academicYear"
+                        type="text"
+                        maxlength="20"
+                        placeholder="e.g. 2026"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="term">Term</label>
+                    <select id="term" required>
+                        <option value="">Select term</option>
+                        <option value="Term 1">Term 1</option>
+                        <option value="Term 2">Term 2</option>
+                        <option value="Term 3">Term 3</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="subjects-heading">
+                <div>
+                    <h2>Subject results</h2>
+                    <p class="muted">
+                        Enter a score from 0 to 100 for each subject.
+                    </p>
+                </div>
+
+                <button id="addSubjectButton" type="button">
+                    + Add subject
+                </button>
+            </div>
+
+            <div id="subjectRows"></div>
+
+            <div class="comment-field">
+                <label for="teacherComment">Teacher's comments</label>
+                <textarea
+                    id="teacherComment"
+                    maxlength="1000"
+                    placeholder="Enter comments about the student's progress..."
+                ></textarea>
+            </div>
+
+            <button
+                class="primary save-button"
+                id="saveButton"
+                type="submit"
+            >
+                Save student report
+            </button>
+
+            <div id="message" role="status" aria-live="polite"></div>
+
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>Saved reports</h2>
+
+        <p class="muted">
+            Reports belonging to your organization appear here.
+        </p>
+
+        <button id="refreshButton" type="button">
+            Refresh reports
+        </button>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student No.</th>
+                        <th>Student name</th>
+                        <th>Year</th>
+                        <th>Term</th>
+                        <th>Subjects</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsList"></tbody>
+            </table>
+        </div>
+
+        <div id="emptyReports" class="empty">
+            Loading reports...
+        </div>
+    </section>
+
+</main>
+
+<div id="loadingMessage" class="empty" role="status" aria-live="polite">
+    Checking your organization account...
+</div>
+
+<footer>
+    Nexora Technologies · Student Report Generator
+</footer>
+
+<script>
+    const mainContent = document.getElementById("mainContent");
+    const loadingMessage = document.getElementById("loadingMessage");
+    const studentIdSelect = document.getElementById("studentId");
+    const subjectRows = document.getElementById("subjectRows");
+    const reportForm = document.getElementById("reportForm");
+    const saveButton = document.getElementById("saveButton");
+    const message = document.getElementById("message");
+    const reportsList = document.getElementById("reportsList");
+    const emptyReports = document.getElementById("emptyReports");
+
+    let subjectCount = 0;
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = type;
+    }
+
+    function addSubjectRow() {
+        if (subjectCount >= 20) {
+            showMessage("You can add up to 20 subjects per report.", "error");
+            return;
+        }
+
+        subjectCount++;
+
+        const row = document.createElement("div");
+        row.className = "subject-row";
+
+        const nameField = document.createElement("div");
+        nameField.className = "subject-name";
+
+        const nameLabel = document.createElement("label");
+        nameLabel.textContent = "Subject";
+        nameLabel.htmlFor = "subjectName" + subjectCount;
+
+        const nameInput = document.createElement("input");
+        nameInput.id = "subjectName" + subjectCount;
+        nameInput.type = "text";
+        nameInput.maxLength = 80;
+        nameInput.placeholder = "e.g. Mathematics";
+        nameInput.autocomplete = "off";
+        nameInput.dataset.field = "subject";
+
+        nameField.append(nameLabel, nameInput);
+
+        const scoreField = document.createElement("div");
+
+        const scoreLabel = document.createElement("label");
+        scoreLabel.textContent = "Score";
+        scoreLabel.htmlFor = "subjectScore" + subjectCount;
+
+        const scoreInput = document.createElement("input");
+        scoreInput.id = "subjectScore" + subjectCount;
+        scoreInput.type = "number";
+        scoreInput.min = "0";
+        scoreInput.max = "100";
+        scoreInput.step = "0.01";
+        scoreInput.placeholder = "0–100";
+        scoreInput.dataset.field = "score";
+
+        scoreField.append(scoreLabel, scoreInput);
+
+        const gradeField = document.createElement("div");
+
+        const gradeLabel = document.createElement("label");
+        gradeLabel.textContent = "Grade";
+        gradeLabel.htmlFor = "subjectGrade" + subjectCount;
+
+        const gradeInput = document.createElement("input");
+        gradeInput.id = "subjectGrade" + subjectCount;
+        gradeInput.type = "text";
+        gradeInput.maxLength = 10;
+        gradeInput.placeholder = "Optional";
+        gradeInput.dataset.field = "grade";
+
+        gradeField.append(gradeLabel, gradeInput);
+
+        row.append(nameField, scoreField, gradeField);
+        subjectRows.appendChild(row);
+    }
+
+    async function checkAccount() {
+        const response = await fetch("/api/organizations/me", {
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        if (response.status === 401) {
+            window.location.replace("/login.html");
+            return false;
+        }
+
+        if (!response.ok) {
+            throw new Error("Could not verify your organization account.");
+        }
+
+        const data = await response.json();
+
+        document.getElementById("organizationName").textContent =
+            data.organization.organization_name;
+
+        return true;
+    }
+
+    async function loadStudents() {
+        const response = await fetch("/api/students", {
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        if (response.status === 401) {
+            window.location.replace("/login.html");
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Could not load students.");
+        }
+
+        studentIdSelect.replaceChildren();
+
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = data.students.length
+            ? "Select a student"
+            : "No students registered yet";
+
+        studentIdSelect.appendChild(placeholder);
+
+        for (const student of data.students) {
+            const option = document.createElement("option");
+            option.value = student.id;
+            option.textContent =
+                student.student_number + " — " +
+                student.full_name + " (" +
+                student.class_name + ")";
+
+            studentIdSelect.appendChild(option);
+        }
+
+        if (data.students.length === 0) {
+            showMessage(
+                "Add a student in Student Management before creating a report.",
+                "error"
+            );
+        }
+    }
+
+    function displayReports(reports) {
+        reportsList.replaceChildren();
+
+        emptyReports.hidden = reports.length > 0;
+
+        if (reports.length === 0) {
+            emptyReports.textContent = "No reports saved yet.";
+            return;
+        }
+
+        for (const report of reports) {
+            const row = document.createElement("tr");
+
+            let reportData = report.report_data;
+
+            if (typeof reportData === "string") {
+                try {
+                    reportData = JSON.parse(reportData);
+                } catch {
+                    reportData = {};
+                }
+            }
+
+            const subjects = Array.isArray(reportData?.subjects)
+                ? reportData.subjects.length
+                : 0;
+
+            const values = [
+                report.student_number,
+                report.full_name,
+                report.academic_year,
+                report.term,
+                String(subjects)
+            ];
+
+            for (const value of values) {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            }
+
+            reportsList.appendChild(row);
+        }
+    }
+
+    async function loadReports() {
+        emptyReports.hidden = false;
+        emptyReports.textContent = "Loading reports...";
+
+        const response = await fetch("/api/reports", {
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        if (response.status === 401) {
+            window.location.replace("/login.html");
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Could not load reports.");
+        }
+
+        if (!Array.isArray(data.reports)) {
+            throw new Error("Unexpected report response from the server.");
+        }
+
+        displayReports(data.reports);
+    }
+
+    reportForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const studentId = studentIdSelect.value;
+        const academicYear =
+            document.getElementById("academicYear").value.trim();
+        const term = document.getElementById("term").value;
+        const teacherComment =
+            document.getElementById("teacherComment").value.trim();
+
+        const subjects = [];
+
+        for (const row of subjectRows.querySelectorAll(".subject-row")) {
+            const subject =
+                row.querySelector('[data-field="subject"]').value.trim();
+
+            const scoreText =
+                row.querySelector('[data-field="score"]').value.trim();
+
+            const grade =
+                row.querySelector('[data-field="grade"]').value.trim();
+
+            if (!subject && !scoreText && !grade) {
+                continue;
+            }
+
+            if (!subject || scoreText === "") {
+                showMessage(
+                    "Complete the subject name and score for each row you use.",
+                    "error"
+                );
+                return;
+            }
+
+            const score = Number(scoreText);
+
+            if (!Number.isFinite(score) || score < 0 || score > 100) {
+                showMessage("Every subject score must be from 0 to 100.", "error");
+                return;
+            }
+
+            subjects.push({ subject, score, grade });
+        }
+
+        if (subjects.length === 0) {
+            showMessage("Enter at least one subject and score.", "error");
+            return;
+        }
+
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving report...";
+        message.className = "";
+
+        try {
+            const response = await fetch("/api/reports", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    studentId,
+                    academicYear,
+                    term,
+                    reportData: {
+                        subjects,
+                        teacherComment
+                    }
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
+
+            if (!response.ok) {
+                showMessage(
+                    data.error || "Could not save the report.",
+                    "error"
+                );
+                return;
+            }
+
+            showMessage("Student report saved successfully.", "success");
+
+            reportForm.reset();
+            subjectRows.replaceChildren();
+            subjectCount = 0;
+
+            for (let i = 0; i < 3; i++) {
+                addSubjectRow();
+            }
+
+            await loadReports();
+
+        } catch (error) {
+            showMessage(
+                "Couldn't contact Nexora. Check your connection and try again.",
+                "error"
+            );
+        } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save student report";
+        }
+    });
+
+    document.getElementById("addSubjectButton").addEventListener(
+        "click",
+        addSubjectRow
+    );
+
+    document.getElementById("refreshButton").addEventListener(
+        "click",
+        async () => {
+            try {
+                await loadReports();
+            } catch (error) {
+                emptyReports.hidden = false;
+                emptyReports.textContent = error.message;
+            }
+        }
+    );
+
+    async function startPage() {
+        try {
+            const accountReady = await checkAccount();
+
+            if (!accountReady) {
+                return;
+            }
+
+            await loadStudents();
+
+            for (let i = 0; i < 3; i++) {
+                addSubjectRow();
+            }
+
+            await loadReports();
+
+            loadingMessage.hidden = true;
+            mainContent.hidden = false;
+
+        } catch (error) {
+            loadingMessage.textContent =
+                error.message || "Could not load the report generator.";
+        }
+    }
+
+    startPage();
+</script>
+
+</body>
+</html>
